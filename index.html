@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthTrack - Financial Management by Panth Shah</title>
+    <!-- Stable Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Stable Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Chart.js Datalabels Plugin for showing percentages explicitly on slices -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    
+    <style>
+        /* Tells Tailwind v4 to look for HTML .dark class instead of OS media queries */
+        @dark class;
+
+        /* 100% Foolproof Theme Color Variable Definitions */
+        :root {
+            --bg-app: #f9fafb;       /* Pure clean white/light gray background */
+            --bg-card: #ffffff;      /* Bright white card layout background */
+            --text-main: #111827;    /* Charcoal dark text for maximum legibility */
+            --border-ui: #e5e7eb;    /* Light gray borders */
+            --text-muted: #6b7280;   /* Muted gray info labels */
+            --bg-input: #ffffff;     /* Input fields background */
+        }
+
+        :root.dark {
+            --bg-app: #111827;       /* Deep rich dark gray/black background */
+            --bg-card: #1f2937;      /* Slate card layout background */
+            --text-main: #f9fafb;    /* Bright white/silver primary typography */
+            --border-ui: #374151;    /* Slate borders */
+            --text-muted: #9ca3af;   /* Silver muted labels */
+            --bg-input: #374151;     /* Input slate background */
+        }
+
+        /* Enforce theme rules dynamically across layouts */
+        body {
+            background-color: var(--bg-app) !important;
+            color: var(--text-main) !important;
+        }
+
+        .themed-card {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-ui) !important;
+        }
+
+        .themed-border {
+            border-color: var(--border-ui) !important;
+        }
+
+        .themed-text-main {
+            color: var(--text-main) !important;
+        }
+
+        .themed-text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .themed-input {
+            background-color: var(--bg-input) !important;
+            border-color: var(--border-ui) !important;
+            color: var(--text-main) !important;
+        }
+
+        /* Wood desk image backdrop inspired by Screenshot 2026-06-27 at 3.16.05 PM.jpg */
+        .wood-desk-bg {
+            background: linear-gradient(rgba(43, 29, 14, 0.88), rgba(24, 15, 6, 0.94)), 
+                        url('https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        input, select {
+            outline: none;
+        }
+        input:focus, select:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .hidden-view {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- ================= LANDING PAGE SECTION ================= -->
+    <div id="landingPage" class="wood-desk-bg min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-4xl w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-white/10 relative overflow-hidden text-center">
+            
+            <!-- Desk accessories reflecting Screenshot 2026-06-27 at 3.16.05 PM.jpg -->
+            <div class="absolute top-4 left-6 text-2xl opacity-20 hidden md:block">☕</div>
+            <div class="absolute bottom-6 right-8 text-2xl opacity-20 hidden md:block">📷</div>
+            
+            <div class="mb-4">
+                <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300 uppercase tracking-wider">Portfolio Engineering Project</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-gray-900 dark:text-white">
+                FINANCE <span class="text-indigo-600 dark:text-indigo-400">MANAGEMENT</span>
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto mb-8">
+                Take structural command over your financial trajectory. Track cash flow velocity, monitor metrics, and secure automated intelligence.
+            </p>
+
+            <!-- 3 Core Financial Pillars inspired by Screenshot 2026-06-27 at 3.16.05 PM.jpg -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-3xl mx-auto text-left">
+                <div class="p-5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+                    <div class="text-2xl mb-2">💵</div>
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-1">Funding</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Capture recurring salaries, venture revenue streams, and active injections instantly.</p>
+                </div>
+                <div class="p-5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+                    <div class="text-2xl mb-2">🐷</div>
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-1">Saving</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Calculate safe asset thresholds and isolate custom ratios before expenditure overheads.</p>
+                </div>
+                <div class="p-5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+                    <div class="text-2xl mb-2">📈</div>
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-1">Benefit</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Leverage structural insights using dynamic metrics built right into your dashboard canvas.</p>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <button id="enterAppBtn" class="px-8 py-4 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 active:scale-98 transition duration-150 cursor-pointer">
+                    Open WealthTrack Dashboard →
+                </button>
+            </div>
+
+            <!-- Developer Attribution Block -->
+            <div class="border-t border-gray-200 dark:border-gray-800 pt-6">
+                <p class="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 font-bold mb-3">Architected & Engineered By</p>
+                <h2 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Panth Shah</h2>
+                
+                <div class="flex flex-wrap justify-center gap-6 text-sm">
+                    <a href="https://www.linkedin.com/in/panth-shah-445144389" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center gap-1">
+                        🔗 LinkedIn
+                    </a>
+                    <a href="https://github.com/PanthShah2007" target="_blank" rel="noopener noreferrer" class="text-gray-800 dark:text-gray-200 hover:underline font-semibold flex items-center gap-1">
+                        🐙 GitHub
+                    </a>
+                    <a href="mailto:panthshah2007@gmail.com" class="text-red-500 dark:text-red-400 hover:underline font-semibold flex items-center gap-1">
+                        ✉️ panthshah2007@gmail.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= MAIN APP WORKSPACE SECTION ================= -->
+    <div id="mainAppWorkspace" class="container mx-auto p-4 max-w-7xl flex-grow hidden-view">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8 pb-4 border-b themed-border">
+            <div>
+                <h1 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">💰 WealthTrack</h1>
+                <p class="text-xs themed-text-muted">System Developer: Panth Shah</p>
+            </div>
+            <div class="flex gap-2">
+                <!-- EXPLICIT MULTI-STATE THEME TOGGLE BUTTON -->
+                <button id="themeButton" class="px-3 py-1.5 rounded-lg text-gray-800 dark:text-gray-200 hover:opacity-90 transition cursor-pointer text-xs font-bold border themed-border themed-card">☀️ Light Theme</button>
+                <button id="exportCsv" class="px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition cursor-pointer text-xs font-medium">📥 Export CSV</button>
+                <button id="returnToLanding" class="px-3 py-1.5 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition cursor-pointer text-xs font-medium">🏠 Main Page</button>
+            </div>
+        </header>
+
+        <!-- Metrics Grid -->
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="themed-card p-6 rounded-2xl shadow-sm border">
+                <p class="text-sm themed-text-muted font-medium">Total Balance</p>
+                <h3 id="totalBalance" class="text-2xl font-bold mt-1 themed-text-main">₹0.00</h3>
+            </div>
+            <div class="themed-card p-6 rounded-2xl shadow-sm border">
+                <p class="text-sm themed-text-muted font-medium">🟢 Total Income</p>
+                <h3 id="totalIncome" class="text-2xl font-bold mt-1 text-green-600">₹0.00</h3>
+            </div>
+            <div class="themed-card p-6 rounded-2xl shadow-sm border">
+                <p class="text-sm themed-text-muted font-medium">🔴 Total Expenses</p>
+                <h3 id="totalExpenses" class="text-2xl font-bold mt-1 text-red-500">₹0.00</h3>
+            </div>
+            <div class="themed-card p-6 rounded-2xl shadow-sm border">
+                <p class="text-sm themed-text-muted font-medium">🛡️ Savings Ratio</p>
+                <h3 id="savingsPercentage" class="text-2xl font-bold mt-1 text-indigo-500">0%</h3>
+            </div>
+        </main>
+
+        <!-- Split Content Layout Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Inputs Column (4 spans) -->
+            <div class="lg:col-span-4 space-y-6">
+                <section class="themed-card p-6 rounded-2xl shadow-sm border">
+                    <h2 class="text-xl font-bold mb-4">➕ Add Transaction</h2>
+                    <form id="transactionForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Type</label>
+                            <select id="txType" class="w-full p-2.5 rounded-lg border bg-transparent themed-input">
+                                <option value="expense">Expense 🔴</option>
+                                <option value="income">Income 🟢</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Amount (₹)</label>
+                            <input type="number" id="txAmount" required step="0.01" min="0.01" class="w-full p-2.5 rounded-lg border bg-transparent themed-input" placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Category</label>
+                            <select id="txCategory" class="w-full p-2.5 rounded-lg border bg-transparent themed-input">
+                                <option value="Food">Food & Dining</option>
+                                <option value="Salary">Salary / Income</option>
+                                <option value="Utilities">Utilities & Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Date</label>
+                            <input type="date" id="txDate" required class="w-full p-2.5 rounded-lg border bg-transparent themed-input">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Description</label>
+                            <input type="text" id="txDesc" class="w-full p-2.5 rounded-lg border bg-transparent themed-input" placeholder="e.g. Shopping details">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition cursor-pointer">Add Transaction</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Right Visual Analytics Column (8 spans) -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- Dual Charts Section -->
+                <section class="themed-card p-6 rounded-2xl shadow-sm border">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">📊 Expenditure Distribution Insights</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <!-- Chart A: True Pie Chart with Percentages inside -->
+                        <div class="space-y-2 text-center">
+                            <p class="text-xs font-semibold themed-text-muted uppercase tracking-wider">Category Proportions</p>
+                            <div class="relative h-64 w-full flex items-center justify-center">
+                                <canvas id="expensePieChart"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart B: Comparative Metrics Bar Graph -->
+                        <div class="space-y-2 text-center">
+                            <p class="text-xs font-semibold themed-text-muted uppercase tracking-wider">Volume Distribution</p>
+                            <div class="relative h-64 w-full flex items-center justify-center">
+                                <canvas id="expenseBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Filters Dashboard Workspace panel -->
+                <section class="themed-card p-4 rounded-2xl shadow-sm border flex flex-wrap gap-3 items-center justify-between">
+                    <input type="text" id="searchFilter" placeholder="🔍 Search description..." class="p-2 border rounded-lg bg-transparent themed-input text-sm flex-1 min-w-[200px]">
+                    <select id="categoryFilter" class="p-2 border rounded-lg bg-transparent themed-input text-sm">
+                        <option value="all">All Categories</option>
+                        <option value="Food">Food</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="typeFilter" class="p-2 border rounded-lg bg-transparent themed-input text-sm">
+                        <option value="all">All Types</option>
+                        <option value="income">Income Only</option>
+                        <option value="expense">Expense Only</option>
+                    </select>
+                </section>
+
+                <!-- Data Ledger Table Component -->
+                <section class="themed-card p-6 rounded-2xl shadow-sm border">
+                    <h2 class="text-xl font-bold mb-4">📋 Transaction History</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b themed-border text-sm text-gray-500">
+                                    <th class="pb-3 font-semibold">Details</th>
+                                    <th class="pb-3 font-semibold">Category</th>
+                                    <th class="pb-3 font-semibold">Date</th>
+                                    <th class="pb-3 font-semibold text-right">Amount</th>
+                                    <th class="pb-3 font-semibold text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionList" class="divide-y themed-border"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="themed-card text-center py-6 mt-12 border-t shadow-inner">
+        <p class="text-sm font-medium">
+            Developed by <span class="font-bold text-indigo-600 dark:text-indigo-400">Panth Shah</span>
+        </p>
+        <div class="flex justify-center gap-6 mt-3 text-sm">
+            <a href="https://www.linkedin.com/in/panth-shah-445144389" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium">
+                🔗 LinkedIn
+            </a>
+            <a href="https://github.com/PanthShah2007" target="_blank" rel="noopener noreferrer" class="text-gray-800 dark:text-gray-200 hover:underline flex items-center gap-1 font-medium">
+                🐙 GitHub
+            </a>
+            <a href="mailto:panthshah2007@gmail.com" class="text-red-500 dark:text-red-400 hover:underline flex items-center gap-1 font-medium">
+                ✉️ Email
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Router View Switch Mechanism 
+        const landingPage = document.getElementById('landingPage');
+        const mainAppWorkspace = document.getElementById('mainAppWorkspace');
+        const enterAppBtn = document.getElementById('enterAppBtn');
+        const returnToLanding = document.getElementById('returnToLanding');
+
+        enterAppBtn.addEventListener('click', () => {
+            landingPage.classList.add('hidden-view');
+            mainAppWorkspace.classList.remove('hidden-view');
+            updateCharts(); 
+        });
+
+        returnToLanding.addEventListener('click', () => {
+            mainAppWorkspace.classList.add('hidden-view');
+            landingPage.classList.remove('hidden-view');
+        });
+
+        // App Engine Memory Matrix
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let pieChartInstance = null;
+        let barChartInstance = null;
+
+        const form = document.getElementById('transactionForm');
+        const list = document.getElementById('transactionList');
+        const totalBalanceEl = document.getElementById('totalBalance');
+        const totalIncomeEl = document.getElementById('totalIncome');
+        const totalExpensesEl = document.getElementById('totalExpenses');
+        const savingsPercentageEl = document.getElementById('savingsPercentage');
+
+        const searchFilter = document.getElementById('searchFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const typeFilter = document.getElementById('typeFilter');
+
+        const themeButton = document.getElementById('themeButton');
+        const exportCsvBtn = document.getElementById('exportCsv');
+
+        // Explicit Chart.js Data Label configuration registration
+        Chart.register(ChartDataLabels);
+
+        document.getElementById('txDate').valueAsDate = new Date();
+
+        // Calculate and Update Metrics
+        function updateMetrics() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expenses;
+            const savingsRatio = income > 0 ? Math.max(0, Math.round(((income - expenses) / income) * 100)) : 0;
+
+            totalBalanceEl.textContent = `₹${balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            totalIncomeEl.textContent = `₹${income.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            totalExpensesEl.textContent = `₹${expenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            savingsPercentageEl.textContent = `${savingsRatio}%`;
+            
+            if(balance < 0) {
+                totalBalanceEl.className = "text-2xl font-bold mt-1 text-red-500";
+            } else {
+                totalBalanceEl.className = "text-2xl font-bold mt-1 themed-text-main";
+            }
+        }
+
+        // Rebuild Charts on context updates
+        function updateCharts() {
+            const pieCtx = document.getElementById('expensePieChart');
+            const barCtx = document.getElementById('expenseBarChart');
+            
+            if (!pieCtx || !barCtx || mainAppWorkspace.classList.contains('hidden-view')) return;
+
+            if (pieChartInstance) pieChartInstance.destroy();
+            if (barChartInstance) barChartInstance.destroy();
+
+            const categoryTotals = {};
+            const items = transactions.filter(t => t.type === 'expense');
+            items.forEach(t => {
+                categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
+            });
+
+            const labels = Object.keys(categoryTotals);
+            const data = Object.values(categoryTotals);
+            const totalSum = data.reduce((a, b) => a + b, 0);
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#f3f4f6' : '#1f2937';
+            const gridColor = isDark ? '#374151' : '#e5e7eb';
+            const chartColors = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981', '#6366f1', '#8b5cf6'];
+
+            if(labels.length === 0) {
+                const drawEmptyState = (ctx, text) => {
+                    const canvas2d = ctx.getContext('2d');
+                    canvas2d.clearRect(0, 0, ctx.width, ctx.height);
+                    canvas2d.font = "14px sans-serif";
+                    canvas2d.fillStyle = textColor;
+                    canvas2d.textAlign = "center";
+                    canvas2d.fillText(text, ctx.width / 2 || 120, ctx.height / 2 || 100);
+                };
+                drawEmptyState(pieCtx, "Add an expense item...");
+                drawEmptyState(barCtx, "No data available");
+                return;
+            }
+
+            // 1. Build true Percentage Pie Chart
+            pieChartInstance = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: chartColors,
+                        borderWidth: isDark ? 2 : 1,
+                        borderColor: isDark ? '#1f2937' : '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: textColor, font: { size: 11 } }
+                        },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: (value) => {
+                                return ((value / totalSum) * 100).toFixed(1) + '%';
+                            },
+                            textShadowColor: 'rgba(0,0,0,0.6)',
+                            textShadowBlur: 3
+                        }
+                    }
+                }
+            });
+
+            // 2. Build Volume Comparative Bar Graph
+            barChartInstance = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Amount (₹)',
+                        data: data,
+                        backgroundColor: chartColors.slice(0, labels.length),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor, font: { size: 11 } }
+                        },
+                        y: {
+                            grid: { color: gridColor },
+                            ticks: { color: textColor, font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render table history
+        function renderTransactions() {
+            const query = searchFilter.value.toLowerCase();
+            const cat = categoryFilter.value;
+            const type = typeFilter.value;
+
+            const filtered = transactions.filter(t => {
+                const matchesSearch = (t.desc || '').toLowerCase().includes(query);
+                const matchesCat = cat === 'all' || t.category === cat;
+                const matchesType = type === 'all' || t.type === type;
+                return matchesSearch && matchesCat && matchesType;
+            });
+
+            list.innerHTML = '';
+            if(filtered.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-400 text-sm">No transaction entries matched.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(t => {
+                const row = document.createElement('tr');
+                row.className = "border-b themed-border hover:bg-gray-50/10 text-sm";
+                row.innerHTML = `
+                    <td class="py-3.5 max-w-[180px] truncate"><p class="font-medium truncate themed-text-main">${t.desc || 'Untitled'}</p></td>
+                    <td class="py-3.5"><span class="px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-xs font-mono text-gray-800 dark:text-gray-200">${t.category}</span></td>
+                    <td class="py-3.5 text-gray-500">${t.date}</td>
+                    <td class="py-3.5 text-right font-semibold ${t.type === 'income' ? 'text-green-500' : 'text-red-500'}">
+                        ${t.type === 'income' ? '+' : '-'}₹${t.amount.toFixed(2)}
+                    </td>
+                    <td class="py-3.5 text-center">
+                        <button onclick="deleteTransaction('${t.id}')" class="text-gray-400 hover:text-red-500 p-1 rounded transition cursor-pointer">🗑️</button>
+                    </td>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTx = {
+                id: 'tx_' + Date.now(),
+                type: document.getElementById('txType').value,
+                amount: parseFloat(document.getElementById('txAmount').value),
+                category: document.getElementById('txCategory').value,
+                date: document.getElementById('txDate').value,
+                desc: document.getElementById('txDesc').value.trim()
+            };
+            transactions.unshift(newTx);
+            saveAndSync();
+            form.reset();
+            document.getElementById('txDate').valueAsDate = new Date();
+        });
+
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveAndSync();
+        }
+
+        function saveAndSync() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            updateMetrics();
+            renderTransactions();
+            updateCharts();
+        }
+
+        exportCsvBtn.addEventListener('click', () => {
+            if(transactions.length === 0) return alert('No transaction data found.');
+            let csvContent = "data:text/csv;charset=utf-8,ID,Type,Amount,Category,Date,Description\n";
+            transactions.forEach(t => { csvContent += `"${t.id}","${t.type}",${t.amount},"${t.category}","${t.date}","${t.desc}"\n`; });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `WealthTrack_Export.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // FIXED: Guaranteed 100% Color Shifting Logic
+        themeButton.addEventListener('click', () => {
+            const htmlElement = document.documentElement;
+            
+            if (htmlElement.classList.contains('dark')) {
+                // Shift to Light Mode
+                htmlElement.classList.remove('dark');
+                htmlElement.style.colorScheme = 'light';
+                themeButton.textContent = '🌙 Dark Theme';
+            } else {
+                // Shift to Dark Mode
+                htmlElement.classList.add('dark');
+                htmlElement.style.colorScheme = 'dark';
+                themeButton.textContent = '☀️ Light Theme';
+            }
+            
+            // Re-render metrics text colors
+            updateMetrics();
+            // Re-render list text colors
+            renderTransactions();
+            // Re-render chart text and metrics lines instantly matching the theme color
+            updateCharts();
+        });
+
+        [searchFilter, categoryFilter, typeFilter].forEach(el => el.addEventListener('input', renderTransactions));
+
+        updateMetrics();
+        renderTransactions();
+    </script>
+</body>
+</html>
